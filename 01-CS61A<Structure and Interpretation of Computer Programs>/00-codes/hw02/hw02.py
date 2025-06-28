@@ -34,6 +34,7 @@ def product(n, term):
     "*** YOUR CODE HERE ***"
     print("Test")
     print("Test2")
+    print("Test3")
     
 
 
