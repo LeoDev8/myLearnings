@@ -32,6 +32,8 @@ def product(n, term):
     162
     """
     "*** YOUR CODE HERE ***"
+    print("Test")
+    
 
 
 def accumulate(fuse, start, n, term):
