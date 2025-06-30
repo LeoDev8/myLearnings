@@ -32,13 +32,10 @@ def product(n, term):
     162
     """
     "*** YOUR CODE HERE ***"
-    print("Test")
-    print("Test2")
-    print("Test3")
-    print("Test4")
-    print("Test5")
-    print("Test6")
-    print("Test7")
+    sum = 1
+    for i in range(1, n + 1):
+        sum = sum * term(i)
+    return sum
     
 
 
@@ -62,6 +59,24 @@ def accumulate(fuse, start, n, term):
     19
     """
     "*** YOUR CODE HERE ***"
+    # # Method 1
+    # def get_end(fuse, n, term):
+    #     if(n <= 0):
+    #         return 0
+    #     data = fuse(term(n), term(n - 1))
+    #     for i in range(1, n - 2 + 1):
+    #         data = fuse(data, term(i))
+    #     return data
+    # end = get_end(fuse, n, term)
+    
+    # Method 2 Recuration
+    def get_end(fuse, n, term):
+        if(n <= 1):
+            return term(n)
+        return fuse(term(n), get_end(fuse, n - 1, term))
+    end = get_end(fuse, n, term)
+    return fuse(start, end)
+    
 
 
 def summation_using_accumulate(n, term):
@@ -76,7 +91,7 @@ def summation_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(summation_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    return ____
+    return accumulate(add, 0, n, term)
 
 
 def product_using_accumulate(n, term):
@@ -91,7 +106,7 @@ def product_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(product_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    return ____
+    return accumulate(mul, 1, n, term)
 
 
 def make_repeater(f, n):
@@ -108,4 +123,9 @@ def make_repeater(f, n):
     390625
     """
     "*** YOUR CODE HERE ***"
-
+    def func(x):
+        data = f(x)
+        for i in range(0, n - 1):
+            data = f(data)
+        return data
+    return lambda x: func(x)
