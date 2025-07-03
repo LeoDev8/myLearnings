@@ -290,6 +290,7 @@ def max_scoring_num_rolls(dice=six_sided, times_called=1000):
     # return max_index + 1
 
     # Method 2 (Just one for loop)
+    
     get_average = make_averaged(roll_dice, times_called)
     max_score = 0
     max_index = 0

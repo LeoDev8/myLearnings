@@ -50,6 +50,47 @@ def luhn_sum_double(n):
 
 
 
+def has_seven(n):
+    if(n == 0):
+        return False
+    elif(n % 10 == 7):
+        return True
+    else:
+        return has_seven(n // 10)
+
+def seven_game(n, k):
+    i, who, direction = 1, 1, 1
+    while(i < n):
+        if(has_seven(i) or i % 7 == 0):
+            direction = -direction
+        i += 1
+        who = who + direction
+        if(who > k):
+            who = 1
+        if(who < 1):
+            who = k
+    return who
+
+def seven_game_recursive(n, k):
+    def helper(n, k, i, who, direction):
+        if(i == n):
+            return who
+        else:
+            if(has_seven(i) or i % 7 == 0):
+                direction = -direction
+            who = who + direction
+            if(who > k):
+                who = 1
+            if(who < 1):
+                who = k
+            return helper(n, k, i + 1, who, direction)
+    return helper(n, k, 1, 1, 1)
+
+
+
+
+
+
 
 
 
