@@ -86,8 +86,21 @@ def seven_game_recursive(n, k):
             return helper(n, k, i + 1, who, direction)
     return helper(n, k, 1, 1, 1)
 
-
-
+def seven_game_recursive_ultra(n, k):
+    assert k > 0 and type(k) == int, "The number of players must be a positive integer."
+    def helper(i, who, direction):
+        if(i == n):
+            return who
+        else:
+            if(has_seven(i) or i % 7 == 0):
+                direction = -direction
+            who = who + direction
+            if(who > k):
+                who = 1
+            if(who < 1):
+                who = k
+            return helper(i + 1, who, direction)
+    return helper(1, 1, 1)
 
 
 
