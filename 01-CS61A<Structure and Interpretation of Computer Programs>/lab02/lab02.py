@@ -18,7 +18,7 @@ def lambda_curry2(func):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(lambda_curry2)).body[0].body]
     ['Expr', 'Return']
     """
-    return ______
+    return lambda x: lambda y: func(x, y)
 
 
 def sum_digits(y):
@@ -65,6 +65,13 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    def func(N):
+        count = 0
+        for i in range(1, N + 1):
+            if condition(N, i):
+                count += 1
+        return count
+    return func
 
 
 
@@ -95,6 +102,22 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
+    # # Methode1
+    # def repeat(n):
+    #     if n == 0:
+    #         return lambda x: x
+    #     else:
+    #         func_list = [f1, f2, f3]
+    #         def func(x):
+    #             for i in range(1, n + 1):
+    #                 x = func_list[i % 3 - 1](x)
+    #             return x
+    #         return func
+    # return repeat
+    
+    # Method2 Try to write codes in one line
+    from functools import reduce
+    return lambda n: ((lambda x: x) if (n == 0) else (lambda x : (reduce(lambda z, i: [f1, f2, f3][i % 3 - 1](z), range(1, n + 1), x))))
 
 
 
