@@ -25,11 +25,14 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    return (1 if n == 8 else 0) if (n < 10) else (num_eights(n // 10) + num_eights(n % 10))
 
 
 def interleaved_sum(n, f_odd, f_even):
     """Compute the sum f_odd(1) + f_even(2) + f_odd(3) + ..., up
     to n.
+    1. n is an odd number: return interleaved_sum(n - 1, f_odd, f_even) + f_odd(n)
+    2. n is an even number: return interleaved_sum(n - 1, f_odd, f_even) + f_even(n)
 
     >>> identity = lambda x: x
     >>> square = lambda x: x * x
@@ -49,6 +52,19 @@ def interleaved_sum(n, f_odd, f_even):
     True
     """
     "*** YOUR CODE HERE ***"
+    # Failed Using % mode operator
+    # if n == 1:
+    #     return f_odd(1)
+    # else:
+    #     return interleaved_sum(n - 1, f_odd, f_even) + (f_even(n) if (n % 2 == 0) else f_odd(n))
+    
+    def helper(i, func):
+        if i > n:
+            return 0
+        else:
+            return func(i) + helper(i + 1, f_even if func == f_odd else f_odd)
+    return helper(1, f_odd)
+    
 
 
 def next_smaller_dollar(bill):
@@ -85,6 +101,16 @@ def count_dollars(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(amount, bill):
+        if amount == 0:
+            return 1
+        if amount < 0:
+            return 0
+        if bill == None:
+            return 0
+        else:
+            return helper(amount, next_smaller_dollar(bill)) + helper(amount - bill, bill)
+    return helper(total, 100)
 
 
 def shuffle(s):
@@ -102,6 +128,12 @@ def shuffle(s):
     """
     assert len(s) % 2 == 0, 'len(seq) must be even'
     "*** YOUR CODE HERE ***"
+    s0 = s[:len(s) // 2]
+    s1 = s[len(s) // 2:]
+    ss = []
+    for i in range(0, len(s0)):
+        ss = ss + [s0[i]] + [s1[i]]
+    return ss
 
 
 def merge(s, t):
@@ -128,4 +160,9 @@ def merge(s, t):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if len(s) == 0:
+        return t
+    if len(t) == 0:
+        return s
+    else:
+        return [s[0]]+ merge(s[1:], t[:]) if s[0] < t[0] else [t[0]] + merge(s[:], t[1:])
