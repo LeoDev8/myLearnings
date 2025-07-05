@@ -130,10 +130,10 @@ def shuffle(s):
     "*** YOUR CODE HERE ***"
     s0 = s[:len(s) // 2]
     s1 = s[len(s) // 2:]
-    ss = []
+    sss = []
     for i in range(0, len(s0)):
-        ss = ss + [s0[i]] + [s1[i]]
-    return ss
+        sss = sss + [s0[i]] + [s1[i]]
+    return sss
 
 
 def merge(s, t):
