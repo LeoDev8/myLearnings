@@ -2,6 +2,6 @@
     "files.exclude": {
         "*.mp3": true,
         "*.mp4": true,
-        "*.pdf": true
+        "**.pdf": true
     }
 }
