@@ -60,6 +60,12 @@ def about(keywords):
 
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def func_return(para):
+        p_splted = list(map(lambda x: lower(remove_punctuation(x)), para.split(" ")))
+        for keyword in keywords:
+            return keyword in p_splted
+        return False
+    return func_return
     # END PROBLEM 2
 
 
