@@ -96,6 +96,24 @@ def accuracy(typed, source):
     source_words = split(source)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    # If typed is empty and source is empty, then the accuracy is 100.0.
+    if len(typed_words) == 0 and len(source_words) == 0:
+        return 100.0
+    # If typed is empty but source is not empty, then the accuracy is 0.0.
+    if len(typed_words) == 0 and (not (len(source_words) == 0)):
+        return 0.0
+    # If typed is not empty but source is empty, then the accuracy is 0.0.
+    if (not (len(typed_words) == 0)) and len(source_words) == 0:
+        return 0.0
+    # If typed is longer than source, then the extra words in typed that have no corresponding word in source are all incorrect.
+    else:
+        num_match = 0
+        for index, source_word in enumerate(source_words):
+            if index >= len(typed_words):
+                break
+            if typed_words[index] == source_word:
+                num_match += 1
+        return (num_match / len(typed_words)) * 100
     # END PROBLEM 3
 
 
@@ -114,6 +132,8 @@ def wpm(typed, elapsed):
     assert elapsed > 0, "Elapsed time must be positive"
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    AVERAGE_WORD_LENGTH = 5
+    return ((len(typed) / AVERAGE_WORD_LENGTH) * 60) / elapsed
     # END PROBLEM 4
 
 
@@ -175,6 +195,19 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    # Method 1
+    # index = 0
+    # min_diff = diff_function(typed_word, word_list[0], limit)
+    # for i, word in enumerate(word_list):
+    #     num_diff = diff_function(typed_word, word, limit)
+    #     if num_diff < min_diff:
+    #         min_diff = num_diff
+    #         index = i
+    # return typed_word if typed_word in word_list else (word_list[index] if min_diff <= limit else typed_word)
+    
+    # Method 2
+    diff_list = list(map(lambda x: diff_function(typed_word, x, limit), word_list))
+    return typed_word if typed_word in word_list else (word_list[diff_list.index(min(diff_list))] if min(diff_list) <= limit else typed_word)
     # END PROBLEM 5
 
 
