@@ -27,6 +27,15 @@ def insert_items(s, before, after):
     True
     """
     "*** YOUR CODE HERE ***"
+    count = 0
+    indexs = []
+    for index, i in enumerate(s):
+        if i == before:
+            indexs.append(index)
+    for index in indexs:
+        s.insert(index + 1 + count, after)
+        count += 1
+    return s
 
 
 def group_by(s, fn):
@@ -40,12 +49,12 @@ def group_by(s, fn):
     {9: [-3, 3], 4: [-2, 2], 1: [-1, 1], 0: [0]}
     """
     grouped = {}
-    for ____ in ____:
-        key = ____
+    for item in s:
+        key = fn(item)
         if key in grouped:
-            ____
+            grouped[key] = grouped[key] + [item]
         else:
-            grouped[key] = ____
+            grouped[key] = [item]
     return grouped
 
 
@@ -74,6 +83,12 @@ def prune_leaves(t, vals):
       6
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return None if label(t) in vals else t
+    pruned_branches = []
+    for branch in branches(t):
+        pruned_branches.append(prune_leaves(branch, vals))
+    return tree(label(t), [x for x in pruned_branches if x != None])
 
 
 from math import sqrt
@@ -92,6 +107,7 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    return sqrt((get_lat(city_a) - get_lat(city_b)) ** 2 + (get_lon(city_a) - get_lon(city_b)) ** 2)
 
 def closer_city(lat, lon, city_a, city_b):
     """
@@ -109,6 +125,7 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    return get_name(city_a) if distance(city_a, make_city("", lat, lon)) <= distance(city_b, make_city("", lat, lon)) else get_name(city_b)
 
 def check_city_abstraction():
     """
@@ -199,16 +216,16 @@ def buy(fruits_to_buy, prices, total_amount):
     [3 apples][3 kiwis]
     [6 apples][2 kiwis]
     [9 apples][1 kiwi]
-    """
+    """ 
     def add(fruits, amount, cart):
         if fruits == [] and amount == 0:
             print(cart)
         elif fruits and amount > 0:
             fruit = fruits[0]
-            price = ____
-            for k in ____:
+            price = prices[fruit]
+            for k in range(1, amount // price + 1):
                 # Hint: The display function will help you add fruit to the cart.
-                add(____, ____, ____)
+                add(fruits[1:], amount - price * k, cart + display(fruit, k))
     add(fruits_to_buy, total_amount, '')
 
 
@@ -237,7 +254,7 @@ def count_palindromes(L):
     >>> count_palindromes(("Acme", "Madam", "Pivot", "Pip"))
     2
     """
-    return ______
+    return len(list(filter(lambda x: x, map(lambda str: list(reversed(str.lower())) == list(str.lower()), list(L)))))
 
 
 def change_abstraction(change):
