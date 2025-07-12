@@ -234,8 +234,34 @@ def furry_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    typed_len = len(typed)
+    source_len = len(source)
+    bias = abs(typed_len - source_len)
+    if bias > limit:
+        return limit + 1
+    if typed_len == 1 or source_len == 1:
+        return bias if typed[0] == source[0] else bias + 1
+    if bias != 0:
+        min_len = min(typed_len,source_len)
+        return furry_fixes(typed[:min_len], source[:min_len], limit) + bias
+    else:
+        sub_furry_fixes = furry_fixes(typed[1:], source[1:], limit) if typed[0] == source[0] else furry_fixes(typed[1:], source[1:], limit - 1) + 1
+        return limit + 1 if sub_furry_fixes > limit else sub_furry_fixes
     # END PROBLEM 6
+    
+    # if limit < 0:
+    #     # Exceeded limit, prune
+    #     return limit + 1
+    # elif not typed or not source:
+    #     # One string is empty
+    #     return abs(len(typed) - len(source))
+    # else:
+    #     if typed[0] == source[0]:
+    #         # Characters match, no substitution
+    #         return furry_fixes(typed[1:], source[1:], limit)
+    #     else:
+    #         # Characters differ, count substitution
+    #         return 1 + furry_fixes(typed[1:], source[1:], limit - 1)
 
 
 def minimum_mewtations(typed, source, limit):
