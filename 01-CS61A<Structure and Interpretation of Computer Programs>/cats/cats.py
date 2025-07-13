@@ -343,6 +343,14 @@ def report_progress(typed, source, user_id, upload):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    count = 0
+    for i, word in enumerate(typed):
+        if word != source[i]:
+            break
+        count += 1
+    prog = count / len(source)
+    upload({'id': user_id, 'progress': prog})
+    return prog
     # END PROBLEM 8
 
 
