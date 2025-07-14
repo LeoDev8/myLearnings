@@ -61,9 +61,10 @@ def about(keywords):
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
     def func_return(para):
-        p_splted = list(map(lambda x: lower(remove_punctuation(x)), para.split(" ")))
+        p_splted = list(map(lambda x: remove_punctuation(lower(x)), para.split(" ")))
         for keyword in keywords:
-            return keyword in p_splted
+            if keyword in p_splted:
+                return True
         return False
     return func_return
     # END PROBLEM 2
@@ -281,11 +282,15 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
+    if limit <= 0: # Base cases should go here, you may add more base cases as needed.
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return limit + 1
         # END
+    if (len(typed) == 0 and len(source) == 1) or (len(typed) == 1 and len(source) == 0) or ((len(typed) == 1 and len(source) == 1) and (typed != source)):
+        return 1
+    if (len(typed) == 0 and len(source) == 0) or ((len(typed) == 1 and len(source) == 1) and (typed == source)):
+        return 0
     # Recursive cases should go below here
     if ___________: # Feel free to remove or add additional cases
         # BEGIN
@@ -375,6 +380,11 @@ def time_per_word(words, timestamps_per_player):
     tpp = timestamps_per_player  # A shorter name (for convenience)
     # BEGIN PROBLEM 9
     times = []  # You may remove this line
+    for tp in tpp:
+        step = []
+        for i in range(1, len(tp)):
+            step.append(tp[i] - tp[i - 1])
+        times.append(step)
     # END PROBLEM 9
     return {'words': words, 'times': times}
 
@@ -403,6 +413,16 @@ def fastest_words(words_and_times):
     word_indices = range(len(words))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    returned_words = []
+    for i in player_indices:
+        returned_words.append([])
+    for i in word_indices:
+        min_index = 0
+        for j in player_indices:
+            if times[j][i] < times[min_index][i]:
+                min_index = j
+        returned_words[min_index].append(words[i])
+    return returned_words
     # END PROBLEM 10
 
 
