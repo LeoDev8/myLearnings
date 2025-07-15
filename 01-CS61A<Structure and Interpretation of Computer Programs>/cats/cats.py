@@ -282,27 +282,26 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    if limit <= 0: # Base cases should go here, you may add more base cases as needed.
+    if limit < 0: # Base cases should go here, you may add more base cases as needed.
         # BEGIN
         "*** YOUR CODE HERE ***"
         return limit + 1
-        # END
-    if (len(typed) == 0 and len(source) == 1) or (len(typed) == 1 and len(source) == 0) or ((len(typed) == 1 and len(source) == 1) and (typed != source)):
-        return 1
-    if (len(typed) == 0 and len(source) == 0) or ((len(typed) == 1 and len(source) == 1) and (typed == source)):
-        return 0
-    # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    if typed == "" or source == "":
+        return min(limit + 1, abs(len(typed) - len(source)))
+    if typed[0] == source[0]:
+        if len(typed) == 1 and len(source) == 1:
+            return 0
+        elif len(typed) == 1:
+            return minimum_mewtations("", source[1:], limit)
+        elif len(source) == 1:
+            return minimum_mewtations(typed[1:], "", limit)
+        else:
+            return minimum_mewtations(typed[1:], source[1:], limit)
     else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+        add = 1 + minimum_mewtations(typed, source[1:], limit - 1)
+        remove = 1 + minimum_mewtations(typed[1:], source, limit - 1)
+        substitute = 1 + minimum_mewtations(typed[1:], source[1:], limit - 1)
+        return min(add, remove, substitute)
 
 
 # Ignore the line below
