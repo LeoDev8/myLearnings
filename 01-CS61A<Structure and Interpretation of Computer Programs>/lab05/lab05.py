@@ -13,12 +13,15 @@ class ScaleIterator:
     """
     def __init__(self, s, k):
         "*** YOUR CODE HERE ***"
+        self.t = iter(s)
+        self.k = k 
 
     def __iter__(self):
         return self
 
     def __next__(self):
         "*** YOUR CODE HERE ***"
+        return next(self.t) * self.k
 
 
 def scale(it, multiplier):
@@ -35,6 +38,9 @@ def scale(it, multiplier):
     [2, 4, 6, 8, 10]
     """
     "*** YOUR CODE HERE ***"
+    # yield from [next(it) * multiplier for _ in range(len(list(it)))]
+    for item in it:
+        yield item * multiplier
 
 
 def hailstone(n):
@@ -51,7 +57,19 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    yield n
+    if n == 1:
+        return
+    elif n % 2 == 0:
+        yield from hailstone(n // 2)
+    else:
+        yield from hailstone(3 * n + 1)
+        
 
+
+def test(n):
+    yield n
+    print("asdasdsda")
 
 def make_generators_generator(g):
     """Generates all the "sub"-generators of the generator returned by
@@ -108,7 +126,12 @@ def partial_reverse(s, start):
     [1, 2, 7, 6, 5, 3, 4]
     """
     "*** YOUR CODE HERE ***"
-
+    left = start
+    right = len(s) - 1
+    while left < right:
+        s[left], s[right] = s[right], s[left]
+        left += 1
+        right -= 1
 
 
 # Tree Data Abstraction
