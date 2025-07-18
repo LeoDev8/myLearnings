@@ -38,6 +38,10 @@ class VendingMachine:
     def __init__(self, product, price):
         """Set the product and its price, as well as other instance attributes."""
         "*** YOUR CODE HERE ***"
+        self.product = product
+        self.price = price
+        self.stock = 0
+        self.balance = 0
 
     def restock(self, n):
         """Add n to the stock and return a message about the updated stock level.
@@ -45,6 +49,8 @@ class VendingMachine:
         E.g., Current candy stock: 3
         """
         "*** YOUR CODE HERE ***"
+        self.stock = self.stock + n
+        return f'Current {self.product} stock: {self.stock}'
 
     def add_funds(self, n):
         """If the machine is out of stock, return a message informing the user to restock
@@ -57,6 +63,11 @@ class VendingMachine:
         E.g., Current balance: $4
         """
         "*** YOUR CODE HERE ***"
+        if self.stock == 0:
+            return f'Nothing left to vend. Please restock. Here is your ${n}.'
+        else:
+            self.balance = self.balance + n
+            return f'Current balance: ${self.balance}'
 
     def vend(self):
         """Dispense the product if there is sufficient stock and funds and
@@ -70,6 +81,19 @@ class VendingMachine:
               Please add $3 more funds.
         """
         "*** YOUR CODE HERE ***"
+        if self.stock == 0:
+            return f'Nothing left to vend. Please restock.'
+        elif self.balance < self.price:
+            a = self.price - self.balance
+            return f'Please add ${a} more funds.'
+        else:
+            a = self.balance - self.price
+            self.stock -= 1
+            self.balance = 0
+            if a == 0:
+                return f'Here is your {self.product}.'
+            else: 
+                return f'Here is your {self.product} and ${a} change.'
 
 
 class Account:
@@ -114,7 +138,12 @@ class Account:
         """Return the number of years until balance would grow to amount."""
         assert self.balance > 0 and amount > 0 and self.interest > 0
         "*** YOUR CODE HERE ***"
-
+        year = 0
+        balance = self.balance
+        while balance <= amount:
+            year += 1
+            balance = balance + balance * self.interest
+        return year
 
 class FreeChecking(Account):
     """A bank account that charges for withdrawals, but the first two are free!
@@ -144,6 +173,12 @@ class FreeChecking(Account):
     free_withdrawals = 2
 
     "*** YOUR CODE HERE ***"
+    def withdraw(self, amount):
+        if self.free_withdrawals > 0:
+            self.free_withdrawals -= 1
+            return Account.withdraw(self, amount)
+        else:
+            return Account.withdraw(self, amount + self.withdraw_fee)
 
 
 def add_d_leaves(t, v):
