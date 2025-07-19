@@ -301,7 +301,7 @@ def delete(t, x):
     """
     new_branches = []
     for b in t.branches:
-        delete(b, x)
+        dt = Tree(1, [Tree(2, [Tree(4), Tree(5)]), Tree(3, [Tree(6), Tree(2)]), Tree(2, [Tree(6),  Tree(2), Tree(7), Tree(8)]),     Tree(4)])elete(b, x)
         if b.label == x:
             new_branches.extend(b.branches)
         else:
