@@ -244,7 +244,15 @@ def add_d_leaves(t, v):
         10
     """
     "*** YOUR CODE HERE ***"
+    def helper(node, depth):
+        for b in node.branches:
+            helper(b, depth + 1)
+        node.branches.extend([Tree(v) for _ in range(depth)])
+    helper(t, 0)
 
+
+
+  
 
 def prune_min(t):
     """Prune the tree mutatively.
@@ -262,14 +270,14 @@ def prune_min(t):
     >>> t3
     Tree(6, [Tree(3, [Tree(1)])])
     """
-    if _____________:
-        return
-    _____________
-    _____________
-    if _____________:
-        _____________
+    if not t.branches:
+        return None
+    for b in t.branches:
+        prune_min(b)
+    if t.branches[0].label < t.branches[1].label:
+        t.branches.pop(1)
     else:
-        _____________
+        t.branches.pop(0)
 
 
 def delete(t, x):
@@ -292,13 +300,13 @@ def delete(t, x):
     Tree(1, [Tree(4), Tree(5), Tree(3, [Tree(6)]), Tree(6), Tree(7), Tree(8), Tree(4)])
     """
     new_branches = []
-    for _________ in ________________:
-        _______________________
+    for b in t.branches:
+        delete(b, x)
         if b.label == x:
-            __________________________________
+            new_branches.extend(b.branches)
         else:
-            __________________________________
-    t.branches = ___________________
+            new_branches.extend([b])
+    t.branches = new_branches
 
 
 class Tree:
