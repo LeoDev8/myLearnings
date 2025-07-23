@@ -43,6 +43,19 @@ class Place:
         """
         insect.remove_from(self)
 
+    def __tunnelLength__(self):
+        """Returns a length of a tunnel, which doesn't include the hive of the tunnel.
+        """
+        if not self.exit:
+            length = 1
+            place = self.entrance
+            while place and (not place.is_hive):
+                length += 1
+                place = place.entrance
+            return length
+        else:
+            return self.exit.__tunnelLength__()
+
     def __str__(self):
         return self.name
 
@@ -171,7 +184,8 @@ class ThrowerAnt(Ant):
     damage = 1
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
     food_cost = 3
-    
+    lower_bound = 0
+    upper_bound = self.place.__tunnelLength() - 1 - lower_bound 
     def nearest_bee(self):
         """Return a random Bee from the nearest Place (excluding the Hive) that contains Bees and is reachable from
         the ThrowerAnt's Place by following entrances.
@@ -179,13 +193,14 @@ class ThrowerAnt(Ant):
         This method returns None if there is no such Bee (or none in range).
         """
         # BEGIN Problem 3 and 4
-        current_place = self.place
-        while len(current_place.bees) == 0:
-            if current_place.entrance.is_hive:
-                return None
-            else:
-                current_place = current_place.entrance   
-        return random_bee(current_place.bees) # REPLACE THIS LINE
+        # current_place = self.place
+        # while len(current_place.bees) == 0:
+        #     if current_place.entrance.is_hive:
+        #         return None
+        #     else:
+        #         current_place = current_place.entrance   
+        # return random_bee(current_place.bees) # REPLACE THIS LINE
+        
         # END Problem 3 and 4
 
     def throw_at(self, target):
@@ -212,12 +227,13 @@ def random_bee(bees):
 
 class ShortThrower(ThrowerAnt):
     """A ThrowerAnt that only throws leaves at Bees at most 3 places away."""
-
+    
     name = 'Short'
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
     implemented = False   # Change to True to view in the GUI
+    
     # END Problem 4
 
 
