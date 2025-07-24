@@ -55,6 +55,12 @@ class Place:
             return length
         else:
             return self.exit.__tunnelLength__()
+    
+    def __position__(self):
+        i = 0
+        while self.exit:
+            i += 1
+        return i
 
     def __str__(self):
         return self.name
@@ -185,7 +191,7 @@ class ThrowerAnt(Ant):
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
     food_cost = 3
     lower_bound = 0
-    upper_bound = self.place.__tunnelLength() - 1 - lower_bound 
+    upper_bound = float('inf')
     def nearest_bee(self):
         """Return a random Bee from the nearest Place (excluding the Hive) that contains Bees and is reachable from
         the ThrowerAnt's Place by following entrances.
@@ -200,7 +206,24 @@ class ThrowerAnt(Ant):
         #     else:
         #         current_place = current_place.entrance   
         # return random_bee(current_place.bees) # REPLACE THIS LINE
-        
+        cur_place = self.place
+        for _ in range(0, self.lower_bound):
+            if not cur_place.entrance or cur_place.entrance.is_hive:
+                return None
+            cur_place = cur_place.entrance
+        if self.upper_bound == float('inf'):
+            while len(cur_place.bees) == 0:
+                if not cur_place.entrance or cur_place.entrance.is_hive:
+                    return None
+                else:
+                    cur_place = cur_place.entrance
+            return random_bee(cur_place.bees)
+        else:
+            for _ in range(self.upper_bound - self.lower_bound + 1):
+                if len(cur_place.bees) != 0:
+                    return random_bee(cur_place.bees)
+                else:
+                    cur_place = cur_place.entrance
         # END Problem 3 and 4
 
     def throw_at(self, target):
@@ -232,7 +255,9 @@ class ShortThrower(ThrowerAnt):
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    lower_bound = 0
+    upper_bound = 3
+    implemented = True   # Change to True to view in the GUI
     
     # END Problem 4
 
@@ -244,7 +269,9 @@ class LongThrower(ThrowerAnt):
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    lower_bound = 5
+    upper_bound = float('inf')
     # END Problem 4
 
 

@@ -14,4 +14,13 @@ class Child(Parent):
         super().__init__(name)
         self.age = age
 
+class MyClass:
+    def __init__(self):
+        self.__secret = "hidden"
 
+    def __private_method__(self):
+        print("This is a private method")
+
+    def public_method(self):
+        print("Calling private method from public method:")
+        # self.__private_method()
