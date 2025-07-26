@@ -144,7 +144,14 @@ class Ant(Insect):
             place.ant = self
         else:
             # BEGIN Problem 8b
-            assert place.ant is None, 'Too many ants in {0}'.format(place)
+            the_ant = place.ant
+            if the_ant.is_container:
+                assert not self.is_container and the_ant.can_contain(self), 'Too many ants in {0}'.format(place)
+                the_ant.store_ant(self)
+            else:
+                assert self.is_container and self.can_contain(the_ant), 'Too many ants in {0}'.format(place)
+                place.ant = self
+                self.store_ant(the_ant)
             # END Problem 8b
         Insect.add_to(self, place)
 
@@ -355,11 +362,14 @@ class ContainerAnt(Ant):
     def can_contain(self, other):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        return (not self.ant_contained) and (not other.is_container)
         # END Problem 8a
 
     def store_ant(self, ant):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        if self.can_contain:
+            self.ant_contained = ant
         # END Problem 8a
 
     def remove_ant(self, ant):
@@ -380,6 +390,10 @@ class ContainerAnt(Ant):
     def action(self, gamestate):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        if self.ant_contained:
+            if self.health != 0:
+                self.ant_contained.reduce_health(0)
+                self.ant_contained.action(gamestate)
         # END Problem 8a
 
 
