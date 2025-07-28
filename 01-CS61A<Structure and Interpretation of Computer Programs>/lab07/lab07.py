@@ -30,6 +30,16 @@ def has_path(t, target):
     """
     assert len(target) > 0, 'no path for empty target.'
     "*** YOUR CODE HERE ***"
+    if len(target) == 1:
+        return t.label == target
+    else:
+        if t.label != target[0] or (t.label == target[0] and len(t.branches) == 0):
+            return False
+        else:
+            for branch in t.branches:
+                if branch.label == target[1]:
+                    return has_path(branch, target[1:])
+
 
 
 def long_paths(tree, n):
@@ -62,7 +72,15 @@ def long_paths(tree, n):
     [Link(0, Link(11, Link(12, Link(13, Link(14)))))]
     """
     "*** YOUR CODE HERE ***"
-
+    paths = []
+    if tree.is_leaf():
+        if n <= 0:
+            paths.append(Link(tree.label))
+    else:
+        for b in tree.branches:
+            for p in long_paths(b, n - 1):
+                paths.append(Link(tree.label, p))
+    return paths
 
 def without(s, i):
     """Return a new linked list like s but without the element at index i.
@@ -78,7 +96,14 @@ def without(s, i):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if s is Link.empty:
+        return Link.empty
+    if i == 0:
+        return without(s.rest, -1)
+    else:
+        return Link(s.first, without(s.rest, i - 1))
+        
+    
 
 def slice_link(link, start, end):
     """Slices a linked list from start to end (as with a normal Python list).
@@ -89,35 +114,41 @@ def slice_link(link, start, end):
     <1 4 1>
     """
     "*** YOUR CODE HERE ***"
+    if start == 0:
+        if end == 1:
+            return Link(link.first)
+        return Link(link.first, slice_link(link.rest, 0, end - 1))
+    else:
+        return slice_link(link.rest, start - 1, end - 1)
 
 
 def level_mutation_link(t, funcs):
-	"""Mutates t using the functions in the linked list funcs.
+    """Mutates t using the functions in the linked list funcs.
 
-	>>> t = Tree(1, [Tree(2, [Tree(3)])])
-	>>> funcs = Link(lambda x: x + 1, Link(lambda y: y * 5, Link(lambda z: z ** 2)))
-	>>> level_mutation_link(t, funcs)
-	>>> t    # At level 0, apply x + 1; at level 1, apply y * 5; at level 2 (leaf), apply z ** 2
-	Tree(2, [Tree(10, [Tree(9)])])
-	>>> t2 = Tree(1, [Tree(2), Tree(3, [Tree(4)])])
-	>>> level_mutation_link(t2, funcs)
-	>>> t2    # Level 0: 1+1=2; Level 1: 2*5=10 => 10**2 = 100, 3*5=15; Level 2 (leaf): 4**2=16
-	Tree(2, [Tree(100), Tree(15, [Tree(16)])])
-	>>> t3 = Tree(1, [Tree(2)])
-	>>> level_mutation_link(t3, funcs)
-	>>> t3    # Level 0: 1+1=2; Level 1: 2*5=10; no further levels, so apply remaining z ** 2: 10**2=100
-	Tree(2, [Tree(100)])
-	"""
-	if _____________________:
-		return
-	t.label = _____________________
-	remaining = _____________________
-	if __________________:
-		while _____________________:
-			_____________________
-			remaining = remaining.rest
-	for b in t.branches:
-		_____________________
+    >>> t = Tree(1, [Tree(2, [Tree(3)])])
+    >>> funcs = Link(lambda x: x + 1, Link(lambda y: y * 5, Link(lambda z: z ** 2)))
+    >>> level_mutation_link(t, funcs)
+    >>> t    # At level 0, apply x + 1; at level 1, apply y * 5; at level 2 (leaf), apply z ** 2
+    Tree(2, [Tree(10, [Tree(9)])])
+    >>> t2 = Tree(1, [Tree(2), Tree(3, [Tree(4)])])
+    >>> level_mutation_link(t2, funcs)
+    >>> t2    # Level 0: 1+1=2; Level 1: 2*5=10 => 10**2 = 100, 3*5=15; Level 2 (leaf): 4**2=16
+    Tree(2, [Tree(100), Tree(15, [Tree(16)])])
+    >>> t3 = Tree(1, [Tree(2)])
+    >>> level_mutation_link(t3, funcs)
+    >>> t3    # Level 0: 1+1=2; Level 1: 2*5=10; no further levels, so apply remaining z ** 2: 10**2=100
+    Tree(2, [Tree(100)])
+    """
+    if funcs is Link.empty:
+        return t
+    t.label = funcs.first(t.label)
+    remaining = funcs.rest
+    if t.is_leaf():
+        while remaining is not Link.empty:
+            t.label = remaining.first(t.label)
+            remaining = remaining.rest
+    for b in t.branches:
+        level_mutation_link(b, remaining)
 
 
 class Tree:
