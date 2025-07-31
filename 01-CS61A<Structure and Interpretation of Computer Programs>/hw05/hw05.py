@@ -49,7 +49,29 @@ def deep_map_mut(func, s):
     <9 <16> 25 36>
     """
     "*** YOUR CODE HERE ***"
-
+    # if isinstance(s.first, Link):
+    #     deep_map_mut(func, s.first)
+    # if s.rest is Link.empty:
+    #     s.first = func(s.first)
+    # s.first = func(s.first)
+    # s.rest = deep_map_mut(func, s.rest)
+    
+    # # Method1
+    # if s is Link.empty:
+    #     return 
+    # if isinstance(s.first, Link):
+    #     deep_map_mut(func, s.first)
+    # else:
+    #     s.first = func(s.first)
+    # deep_map_mut(func, s.rest)
+    
+    # Method2
+    while s is not Link.empty:
+        if isinstance(s.first, Link):
+            deep_map_mut(func, s.first)
+        else:
+            s.first = func(s.first)
+        s = s.rest
 
 def lgk_pow(n,k):
     """Computes n^k.
