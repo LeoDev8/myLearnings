@@ -18,7 +18,16 @@ def store_digits(n):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
     "*** YOUR CODE HERE ***"
-
+    if n < 10:
+        return Link(n)
+    else:
+        rest = store_digits(n // 10)
+        current = rest
+        while current.rest is not Link.empty:
+            current = current.rest
+        current.rest = Link(n % 10)
+        return rest
+    
 
 def deep_map_mut(func, s):
     """Mutates a deep link s by replacing each item found with the
@@ -52,6 +61,15 @@ def lgk_pow(n,k):
     >>> a = lgk_pow(2, 100000000) # make sure you have log time
     """
     "*** YOUR CODE HERE ***"
+    if k == 0:
+        return 1
+    elif k == 1:
+        return n
+    elif k % 2 == 0:
+        half = lgk_pow(n, k / 2)
+        return half * half
+    else:
+        return n * lgk_pow(n, (k - 1))
 
 
 class Link:
