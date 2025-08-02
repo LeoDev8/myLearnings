@@ -1,49 +1,54 @@
-CREATE TABLE parents AS
-  SELECT 'ace' AS parent, 'bella' AS child UNION
-  SELECT 'ace'          , 'charlie'        UNION
-  SELECT 'daisy'        , 'hank'           UNION
-  SELECT 'finn'         , 'ace'            UNION
-  SELECT 'finn'         , 'daisy'          UNION
-  SELECT 'finn'         , 'ginger'         UNION
-  SELECT 'ellie'        , 'finn';
+create table parents as
+  select 'ace' as parent, 'bella' as child union
+  select 'ace'          , 'charlie'        union
+  select 'daisy'        , 'hank'           union
+  select 'finn'         , 'ace'            union
+  select 'finn'         , 'daisy'          union
+  select 'finn'         , 'ginger'         union
+  select 'ellie'        , 'finn';
 
-CREATE TABLE dogs AS
-  SELECT 'ace' AS name, 'long' AS fur, 26 AS height UNION
-  SELECT 'bella'      , 'short'      , 52           UNION
-  SELECT 'charlie'    , 'long'       , 47           UNION
-  SELECT 'daisy'      , 'long'       , 46           UNION
-  SELECT 'ellie'      , 'short'      , 35           UNION
-  SELECT 'finn'       , 'curly'      , 32           UNION
-  SELECT 'ginger'     , 'short'      , 28           UNION
-  SELECT 'hank'       , 'curly'      , 31;
+create table dogs as
+  select 'ace' as name, 'long' as fur, 26 as height union
+  select 'bella'      , 'short'      , 52           union
+  select 'charlie'    , 'long'       , 47           union
+  select 'daisy'      , 'long'       , 46           union
+  select 'ellie'      , 'short'      , 35           union
+  select 'finn'       , 'curly'      , 32           union
+  select 'ginger'     , 'short'      , 28           union
+  select 'hank'       , 'curly'      , 31;
 
-CREATE TABLE sizes AS
-  SELECT 'toy' AS size, 24 AS min, 28 AS max UNION
-  SELECT 'mini'       , 28       , 35        UNION
-  SELECT 'medium'     , 35       , 45        UNION
-  SELECT 'standard'   , 45       , 60;
+create table sizes as
+  select 'toy' as size, 24 as min, 28 as max union
+  select 'mini'       , 28       , 35        union
+  select 'medium'     , 35       , 45        union
+  select 'standard'   , 45       , 60;
 
 
 -- All dogs with parents ordered by decreasing height of their parent
-CREATE TABLE by_parent_height AS
+create table by_parent_height as
   select child from parents, dogs where parent = name order by height DESC;
 
 
 -- The size of each dog
-CREATE TABLE size_of_dogs AS
+create table size_of_dogs as
   select dogs.name, sizes.size from dogs, sizes where dogs.height <= sizes.max and dogs.height > sizes.min;
 
 
--- -- [Optional] Filling out this helper table is recommended
--- CREATE TABLE siblings AS
---   SELECT 'REPLACE THIS LINE WITH YOUR SOLUTION';
+-- [Optional] Filling out this helper table is recommended
+create table siblings as
+  select a.child || ' and ' || b.child as name, c.size as first_size, d.size as second_size 
+    from parents as a, parents as b, size_of_dogs as c, size_of_dogs as d
+    where a.parent = b.parent and a.child <> b.child and a.child < b.child
+          and c.name = a.child and d.name = b.child;
 
--- -- Sentences about siblings that are the same size
--- CREATE TABLE sentences AS
---   SELECT 'REPLACE THIS LINE WITH YOUR SOLUTION';
+-- Sentences about siblings that are the same size
+create table sentences as
+  select 'The two siblings, ' || name || ', have the same size: ' || first_size 
+    from siblings 
+    where first_size = second_size; 
 
 
 -- -- Height range for each fur type where all of the heights differ by no more than 30% from the average height
--- CREATE TABLE low_variance AS
---   SELECT 'REPLACE THIS LINE WITH YOUR SOLUTION';
+-- create table low_variance as
+--   select 'REPLACE THIS LINE WITH YOUR SOLUTION';
 
