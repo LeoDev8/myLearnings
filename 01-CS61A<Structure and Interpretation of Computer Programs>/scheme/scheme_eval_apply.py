@@ -34,6 +34,15 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
     else:
         # BEGIN PROBLEM 3
         "*** YOUR CODE HERE ***"
+        if isinstance(expr.first, Pair):
+            operator = scheme_eval(expr.first, env)
+        elif expr.first in env.bindings.keys():
+            operator = expr.first
+        else:
+            raise SchemeError
+        procedure = env.bindings[operator] if not isinstance(operator, BuiltinProcedure) else operator
+        operands = eval_map(expr.rest, env)
+        return scheme_apply(procedure, operands, env)
         # END PROBLEM 3
 
 def scheme_apply(procedure, args, env):
@@ -45,12 +54,7 @@ def scheme_apply(procedure, args, env):
     if isinstance(procedure, BuiltinProcedure):
         # BEGIN PROBLEM 2
         "*** YOUR CODE HERE ***"
-        py_args = []
-        if args is not nil:
-            py_args.append(args.first)
-            while args.rest is not nil:
-                py_args.append(args.rest.first)
-                args = args.rest
+        py_args = schemelist_to_pylist(args) 
         py_args.append(env) if procedure.need_env is True else None
         # END PROBLEM 2
         try:
@@ -89,6 +93,24 @@ def eval_all(expressions, env):
     # BEGIN PROBLEM 6
     return scheme_eval(expressions.first, env) # replace this with lines of your own code
     # END PROBLEM 6
+
+
+def map_pair(fn, pair):
+    if pair is nil:
+        return nil
+    return Pair(fn(pair.first), map_pair(fn, pair.rest))
+
+def eval_map(pair, env):
+    return map_pair(lambda p: scheme_eval(p, env), pair)
+
+def schemelist_to_pylist(sch_list):
+    py_args = []
+    if sch_list is not nil:
+        py_args.append(sch_list.first)
+        while sch_list.rest is not nil:
+            py_args.append(sch_list.rest.first)
+            sch_list = sch_list.rest
+    return py_args
 
 
 ################################
